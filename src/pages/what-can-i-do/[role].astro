@@ -1,0 +1,70 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+export async function getStaticPaths() {
+  const audiences = await getCollection('audiences');
+  return audiences.map((aud) => ({
+    params: { role: aud.id.replace('.md', '') },
+    props: { aud },
+  }));
+}
+
+const { aud } = Astro.props;
+const { Content } = await render(aud);
+
+// Fetch the full recommendation data for the related links
+const allRecs = await getCollection('recommendations');
+const linkedRecs = allRecs.filter(rec => 
+  aud.data.relatedRecommendations.includes(rec.id.replace('.md', ''))
+);
+---
+<BaseLayout title={`${aud.data.role} — What Can I Do?`}>
+  <article class="max-w-3xl mx-auto px-4 py-16">
+    <p class="mono text-sm text-accent mb-2">YOUR ROLE</p>
+    <h1 class="text-4xl font-serif mb-6 text-ink">{aud.data.role}</h1>
+    
+    <p class="text-xl text-ink-secondary mb-10 leading-relaxed">
+      {aud.data.intro}
+    </p>
+
+    <div class="bg-surface border border-border p-8 rounded-lg mb-10 shadow-sm">
+      <h2 class="font-serif text-2xl mb-6 text-ink border-b border-border pb-4">Practical actions you can take</h2>
+      <ul class="space-y-4">
+        {aud.data.actions.map(action => (
+          <li class="flex items-start">
+            <span class="text-accent mr-3 mt-1">➔</span>
+            <span class="text-ink">{action}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="prose max-w-none text-ink mb-10">
+      <Content />
+    </div>
+
+    {linkedRecs.length > 0 && (
+      <div class="border-t border-border pt-10">
+        <h2 class="font-serif text-2xl mb-6 text-ink">Most relevant recommendations</h2>
+        <div class="grid gap-4">
+          {linkedRecs.map(rec => (
+            <a href={`${base}/recommendations/${rec.id.replace('.md', '')}`} class="block p-4 rounded border border-border bg-surface hover:border-accent transition-colors">
+              <p class="mono text-xs text-ink-secondary mb-1">REC {rec.data.number}</p>
+              <p class="font-serif text-lg text-ink">{rec.data.title}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="mt-12 p-6 bg-highlight rounded-lg text-center">
+      <p class="text-ink mb-4">Have you used these recommendations to inform a change in your organisation?</p>
+      <a href={`${base}/get-involved`} class="inline-block bg-accent text-surface px-6 py-2 rounded font-medium hover:bg-accent-hover transition-colors">
+        Tell us how you have used FAIR
+      </a>
+    </div>
+  </article>
+</BaseLayout>

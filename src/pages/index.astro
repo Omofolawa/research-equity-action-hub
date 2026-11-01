@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Fetch data from our collections
+const findings = await getCollection('findings');
+const sortedFindings = findings.sort((a, b) => a.data.order - b.data.order);
+
+const recs = await getCollection('recommendations');
+const sortedRecs = recs.sort((a, b) => a.data.number - b.data.number);
+---
+<BaseLayout
+  title="Research Equity Action Hub"
+  description="Building more equitable research environments for Black nursing academics."
+>
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28">
+    <p class="mono text-xs sm:text-sm text-accent mb-4 tracking-wider">FAIR NURSING STUDY</p>
+    <h1 class="text-4xl sm:text-6xl font-serif leading-tight mb-6 max-w-3xl text-ink">
+      Building more equitable research environments for Black nursing academics.
+    </h1>
+    <p class="text-lg text-ink-secondary max-w-2xl mb-16">
+      Home of the FAIR Nursing Study. Research, findings, and nine codesigned recommendations for universities, research leaders and the wider sector.
+    </p>
+
+    <div class="mb-20">
+      <p class="mono text-xs sm:text-sm text-ink-secondary mb-2 tracking-wider">2024/25 · UK HIGHER EDUCATION</p>
+      <p class="text-7xl sm:text-8xl font-serif text-accent-secondary leading-none">1%</p>
+      <p class="text-lg mt-3 max-w-xl text-ink">of UK professors are Black academics — 270 in total</p>
+    </div>
+
+    <!-- Findings Section -->
+    <div class="mb-20">
+      <div class="flex items-end justify-between mb-8 border-b border-border pb-4">
+        <h2 class="text-3xl font-serif text-ink">What we found</h2>
+        <a href={`${base}/findings`} class="text-sm text-accent hover:underline">View all findings &rarr;</a>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        {sortedFindings.map(finding => (
+          <a href={`${base}/findings/${finding.id.replace('.md', '')}`} class="p-6 rounded-lg border border-border bg-surface hover:border-accent transition-colors">
+            <p class="mono text-xs text-accent mb-2">FINDING {finding.data.order}</p>
+            <h3 class="text-xl font-serif text-ink mb-2">{finding.data.title}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Recommendations Section -->
+    <div>
+      <div class="flex items-end justify-between mb-8 border-b border-border pb-4">
+        <h2 class="text-3xl font-serif text-ink">The nine recommendations</h2>
+        <a href={`${base}/recommendations`} class="text-sm text-accent hover:underline">View all recommendations &rarr;</a>
+      </div>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {sortedRecs.map(rec => (
+          <a href={`${base}/recommendations/${rec.id.replace('.md', '')}`} class="p-5 rounded-lg border border-border bg-surface hover:border-accent transition-colors">
+            <p class="mono text-xs text-ink-secondary mb-2">REC {rec.data.number}</p>
+            <h3 class="text-lg font-serif text-ink leading-snug">{rec.data.title}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

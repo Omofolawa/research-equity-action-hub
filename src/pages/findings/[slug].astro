@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const findings = await getCollection('findings');
+  return findings.map((finding) => ({
+    // This strips the .md off the end so your URL is clean
+    params: { slug: finding.id.replace('.md', '') },
+    props: { finding },
+  }));
+}
+
+
+const { finding } = Astro.props;
+const { Content } = await render(finding);
+---
+<BaseLayout title={`${finding.data.title} — Findings`}>
+  <article class="max-w-3xl mx-auto px-4 py-16">
+    <p class="mono text-sm text-accent mb-2">FINDING {finding.data.order}</p>
+    <h1 class="text-4xl font-serif mb-6 text-ink">{finding.data.title}</h1>
+    
+    <div class="bg-highlight border border-border p-6 rounded-lg mb-8 text-ink">
+      <h2 class="font-serif text-xl mb-2">Why this matters</h2>
+      <p>{finding.data.whyItMatters}</p>
+    </div>
+
+    <div class="prose max-w-none text-ink">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

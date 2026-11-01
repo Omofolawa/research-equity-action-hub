@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const findings = await getCollection('findings');
+// Sort by the 'order' number in the frontmatter
+const sortedFindings = findings.sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="What We Found" description="The five themes identified through the FAIR Nursing Study.">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <h1 class="text-4xl sm:text-5xl font-serif mb-6 text-ink">What we found</h1>
+    <p class="text-lg text-ink-secondary max-w-3xl mb-12">
+      The FAIR interviews explored how Black nursing academics experience developing and sustaining research careers within UK higher education. Five connected themes were identified.
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      {sortedFindings.map((finding) => (
+        <a href={`${base}/findings/${finding.id.replace('.md', '')}`} class="group block p-6 rounded-lg border border-border bg-surface hover:border-accent transition-colors">
+          <p class="mono text-xs text-accent mb-3">FINDING {finding.data.order}</p>
+          <h2 class="text-2xl font-serif text-ink group-hover:text-accent transition-colors mb-3">
+            {finding.data.title}
+          </h2>
+          <p class="text-ink-secondary">
+            {finding.data.summary}
+          </p>
+          <p class="mt-4 text-sm font-medium text-accent">Read finding &rarr;</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

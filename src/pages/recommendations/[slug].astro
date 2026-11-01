@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const recs = await getCollection('recommendations');
+  return recs.map((rec) => ({
+    // This strips the .md off the end
+    params: { slug: rec.id.replace('.md', '') },
+    props: { rec },
+  }));
+}
+
+const { rec } = Astro.props;
+const { Content } = await render(rec);
+---
+<BaseLayout title={`${rec.data.title} — Recommendations`}>
+  <article class="max-w-3xl mx-auto px-4 py-16">
+    <p class="mono text-sm text-accent mb-2">RECOMMENDATION {rec.data.number}</p>
+    <h1 class="text-4xl font-serif mb-6 text-ink">{rec.data.title}</h1>
+
+    <div class="bg-surface border border-border p-8 rounded-lg mb-10 shadow-sm">
+      <h2 class="font-serif text-2xl mb-4 text-ink">Recommendation</h2>
+      <p class="text-xl text-ink-secondary leading-relaxed">{rec.data.recommendation}</p>
+    </div>
+
+    <section class="mb-8">
+      <h2 class="font-serif text-2xl mb-3 text-ink">Why this matters</h2>
+      <p class="text-ink">{rec.data.whyItMatters}</p>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="font-serif text-2xl mb-3 text-ink">What can be done</h2>
+      <ul class="list-disc pl-5 text-ink space-y-2">
+        {rec.data.whatCanBeDone.map(item => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="font-serif text-2xl mb-3 text-ink">Who should act</h2>
+      <ul class="list-disc pl-5 text-ink space-y-2">
+        {rec.data.whoShouldAct.map(item => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <div class="prose max-w-none text-ink">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

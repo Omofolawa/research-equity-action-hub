@@ -1,0 +1,36 @@
+---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const navItems = [
+  { label: 'Home', href: base + '/' },
+  { label: 'About FAIR', href: base + '/about' },
+  { label: 'What We Found', href: base + '/findings' },
+  { label: 'Recommendations', href: base + '/recommendations' },
+  { label: 'What Can I Do?', href: base + '/what-can-i-do' },
+  { label: 'Resources', href: base + '/resources' },
+  { label: 'Impact', href: base + '/impact' },
+  { label: 'Events', href: base + '/events' },
+  { label: 'Get Involved', href: base + '/get-involved' },
+];
+---
+<header class="border-b border-border bg-bg sticky top-0 z-40">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+    <a href={base + '/'} class="text-ink font-serif text-lg font-semibold">
+      Research Equity Action Hub
+    </a>
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-5 text-sm">
+        {navItems.map((item) => (
+          <li>
+            <a href={item.href} class="text-ink-secondary hover:text-ink transition">
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <ThemeSwitcher />
+  </div>
+</header>
