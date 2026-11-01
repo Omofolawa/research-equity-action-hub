@@ -10,3 +10,4 @@ content:
       - name: title
         label: Title
         type: string
+        
