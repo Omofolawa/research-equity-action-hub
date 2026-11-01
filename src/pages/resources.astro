@@ -1,9 +1,33 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const resources = await getCollection('resources');
+const sortedResources = resources.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
-<BaseLayout title="Resources">
-  <section class="max-w-4xl mx-auto px-4 py-16">
-    <h1 class="text-4xl font-serif mb-6 text-ink">Resources</h1>
-    <p class="text-lg text-ink-secondary">This library brings together the findings, recommendations, publications and practical resources arising from the FAIR Nursing Study.</p>
+<BaseLayout title="Resources" description="Publications, briefings, and practical resources from the FAIR Nursing Study.">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <h1 class="text-4xl sm:text-5xl font-serif mb-6 text-ink">Resources</h1>
+    <p class="text-lg text-ink-secondary max-w-3xl mb-12">
+      This library brings together the findings, recommendations, publications and practical resources arising from the FAIR Nursing Study.
+    </p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedResources.map((resource) => (
+        <div class="p-6 rounded-lg border border-border bg-surface flex flex-col">
+          <p class="mono text-xs text-accent mb-2 uppercase tracking-wider">{resource.data.category}</p>
+          <h2 class="text-xl font-serif text-ink mb-3">{resource.data.title}</h2>
+          <p class="text-sm text-ink-secondary mb-6 flex-grow">{resource.data.description}</p>
+          
+          <div class="mt-auto">
+            {resource.data.link && (
+              <a href={resource.data.link} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-accent hover:underline">
+                Download resource &rarr;
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
   </section>
 </BaseLayout>

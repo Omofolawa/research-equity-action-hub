@@ -80,3 +80,59 @@ content:
       - name: body
         label: Full Content
         type: rich-text
+
+  - name: resources
+    label: Resources
+    type: collection
+    path: src/content/resources
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: description
+        label: Description
+        type: text
+      - name: date
+        label: Date
+        type: date
+      - name: category
+        label: Category
+        type: select
+        options:
+          values:
+            - recommendations
+            - findings
+            - publications
+            - briefings
+            - presentations
+            - media
+      - name: link
+        label: External Link (URL)
+        type: string
+      - name: body
+        label: Content
+        type: rich-text
+
+  - name: impact
+    label: Impact Stories
+    type: collection
+    path: src/content/impact
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: organisation
+        label: Organisation
+        type: string
+      - name: date
+        label: Date
+        type: date
+      - name: description
+        label: Short Description
+        type: text
+      - name: relatedRecommendation
+        label: Related Recommendation (ID)
+        type: string
+      - name: body
+        label: Full Story
+        type: rich-text

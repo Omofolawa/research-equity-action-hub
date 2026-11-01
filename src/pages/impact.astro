@@ -1,9 +1,32 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const impacts = await getCollection('impact');
+const sortedImpacts = impacts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
-<BaseLayout title="Impact">
-  <section class="max-w-4xl mx-auto px-4 py-16">
-    <h1 class="text-4xl font-serif mb-6 text-ink">Impact and influence</h1>
-    <p class="text-lg text-ink-secondary">This page will document how the FAIR findings, recommendations and resources are being used and what develops as a result.</p>
+<BaseLayout title="Impact" description="How the FAIR findings and recommendations are being used in practice.">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <h1 class="text-4xl sm:text-5xl font-serif mb-6 text-ink">Impact and influence</h1>
+    <p class="text-lg text-ink-secondary max-w-3xl mb-12">
+      FAIR was designed to support action as well as generate evidence. This page documents how the FAIR findings, recommendations and resources are being used and what develops as a result.
+    </p>
+
+    <div class="space-y-8 max-w-4xl">
+      {sortedImpacts.map((impact) => (
+        <div class="p-8 rounded-lg border border-border bg-surface">
+          <p class="mono text-xs text-ink-secondary mb-2">{impact.data.date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</p>
+          <h2 class="text-2xl font-serif text-ink mb-2">{impact.data.title}</h2>
+          <p class="text-accent font-medium mb-4">{impact.data.organisation}</p>
+          <p class="text-ink mb-4">{impact.data.description}</p>
+          
+          {impact.data.relatedRecommendation && (
+            <p class="text-sm text-ink-secondary border-t border-border pt-4 mt-4">
+              <strong>Related recommendation:</strong> {impact.data.relatedRecommendation.replace(/-/g, ' ')}
+            </p>
+          )}
+        </div>
+      ))}
+    </div>
   </section>
 </BaseLayout>

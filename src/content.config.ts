@@ -35,5 +35,27 @@ const audiences = defineCollection({
   }),
 });
 
-export const collections = { findings, recommendations, audiences };
+const resources = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/resources' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    category: z.enum(['recommendations', 'findings', 'publications', 'briefings', 'presentations', 'media']),
+    link: z.string().url().optional(),
+    file: z.string().optional(),
+  }),
+});
 
+const impact = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/impact' }),
+  schema: z.object({
+    title: z.string(),
+    organisation: z.string(),
+    date: z.coerce.date(),
+    description: z.string(),
+    relatedRecommendation: z.string().optional(),
+  }),
+});
+
+export const collections = { findings, recommendations, audiences, resources, impact };
