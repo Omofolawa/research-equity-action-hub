@@ -136,3 +136,39 @@ content:
       - name: body
         label: Full Story
         type: rich-text
+
+  - name: events
+    label: Events
+    type: collection
+    path: src/content/events
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: startDate
+        label: Start Date
+        type: date
+      - name: location
+        label: Location
+        type: string
+      - name: description
+        label: Description
+        type: text
+      - name: upcoming
+        label: Is this an upcoming event?
+        type: boolean
+
+  - name: updates
+    label: News Updates
+    type: collection
+    path: src/content/updates
+    fields:
+      - name: title
+        label: Title
+        type: string
+      - name: date
+        label: Date
+        type: date
+      - name: summary
+        label: Summary
+        type: text

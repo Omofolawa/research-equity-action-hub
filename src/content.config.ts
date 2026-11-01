@@ -40,8 +40,9 @@ const resources = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    date: z.coerce.date(),
-    category: z.enum(['recommendations', 'findings', 'publications', 'briefings', 'presentations', 'media']),
+    // This handles both string dates and YAML date objects perfectly
+    date: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
+    category: z.string().transform(val => val.toLowerCase()), 
     link: z.string().url().optional(),
     file: z.string().optional(),
   }),
@@ -52,10 +53,30 @@ const impact = defineCollection({
   schema: z.object({
     title: z.string(),
     organisation: z.string(),
-    date: z.coerce.date(),
+    date: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
     description: z.string(),
     relatedRecommendation: z.string().optional(),
   }),
 });
 
-export const collections = { findings, recommendations, audiences, resources, impact };
+const events = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
+  schema: z.object({
+    title: z.string(),
+    startDate: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
+    location: z.string().optional(),
+    description: z.string(),
+    upcoming: z.boolean().default(true),
+  }),
+});
+
+const updates = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/updates' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
+    summary: z.string(),
+  }),
+});
+
+export const collections = { findings, recommendations, audiences, resources, impact, events, updates };

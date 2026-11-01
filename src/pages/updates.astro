@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const updates = await getCollection('updates');
+const sortedUpdates = updates.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<BaseLayout title="News and Updates">
+  <section class="max-w-4xl mx-auto px-4 py-16">
+    <h1 class="text-4xl font-serif mb-6 text-ink">News and Updates</h1>
+    <p class="text-lg text-ink-secondary mb-12">Keep up with new FAIR publications, events, resources, collaborations and impact.</p>
+
+    <div class="space-y-8">
+      {sortedUpdates.map(update => (
+        <article class="border-b border-border pb-8">
+          <p class="mono text-xs text-ink-secondary mb-2">{update.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+          <h2 class="text-2xl font-serif text-ink mb-2">{update.data.title}</h2>
+          <p class="text-ink">{update.data.summary}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

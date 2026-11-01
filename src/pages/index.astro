@@ -1,3 +1,6 @@
+const updates = await getCollection('updates');
+const latestUpdates = updates.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -62,4 +65,22 @@ const sortedRecs = recs.sort((a, b) => a.data.number - b.data.number);
       </div>
     </div>
   </section>
+      <!-- Latest Updates Section -->
+    {latestUpdates.length > 0 && (
+      <div class="mt-20 pt-10 border-t border-border">
+        <div class="flex items-end justify-between mb-8">
+          <h2 class="text-3xl font-serif text-ink">Latest from FAIR</h2>
+          <a href={`${base}/updates`} class="text-sm text-accent hover:underline">View all updates &rarr;</a>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          {latestUpdates.map(update => (
+            <div class="p-6 rounded-lg border border-border bg-surface">
+              <p class="mono text-xs text-ink-secondary mb-3">{update.data.date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</p>
+              <h3 class="text-lg font-serif text-ink mb-2">{update.data.title}</h3>
+              <p class="text-sm text-ink-secondary">{update.data.summary}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
 </BaseLayout>

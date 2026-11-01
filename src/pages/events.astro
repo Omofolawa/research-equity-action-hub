@@ -1,9 +1,25 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const events = await getCollection('events');
+const upcomingEvents = events.filter(e => e.data.upcoming).sort((a, b) => a.data.startDate.valueOf() - b.data.startDate.valueOf());
 ---
-<BaseLayout title="Events and Updates">
+<BaseLayout title="Events">
   <section class="max-w-4xl mx-auto px-4 py-16">
-    <h1 class="text-4xl font-serif mb-6 text-ink">Events and Updates</h1>
-    <p class="text-lg text-ink-secondary">Explore FAIR dissemination, conference and engagement activity.</p>
+    <h1 class="text-4xl font-serif mb-6 text-ink">Events</h1>
+    <p class="text-lg text-ink-secondary mb-12">Explore FAIR dissemination, conference and engagement activity.</p>
+
+    <h2 class="text-2xl font-serif mb-6 text-ink border-b border-border pb-4">Upcoming events</h2>
+    <div class="space-y-6 mb-16">
+      {upcomingEvents.map(event => (
+        <div class="p-6 rounded-lg border border-border bg-surface">
+          <p class="mono text-sm text-accent mb-2">{event.data.startDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+          <h3 class="text-xl font-serif text-ink mb-2">{event.data.title}</h3>
+          {event.data.location && <p class="text-sm text-ink-secondary mb-3">{event.data.location}</p>}
+          <p class="text-ink">{event.data.description}</p>
+        </div>
+      ))}
+    </div>
   </section>
 </BaseLayout>
