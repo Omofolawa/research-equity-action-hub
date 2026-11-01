@@ -79,3 +79,4 @@ content:
       - name: body
         label: Full Content
         type: rich-text
+        
