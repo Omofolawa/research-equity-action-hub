@@ -1,3 +1,3 @@
 ---
-title: Protected research time e
+title: Protected research time
 ---
