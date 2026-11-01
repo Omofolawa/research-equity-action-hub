@@ -10,3 +10,52 @@ content:
       - name: title
         label: Title
         type: string
+      - name: number
+        label: Recommendation Number
+        type: number
+      - name: recommendation
+        label: Recommendation Text
+        type: text
+      - name: whyItMatters
+        label: Why It Matters
+        type: text
+      - name: whatCanBeDone
+        label: What Can Be Done (Actions)
+        type: string
+        list: true
+      - name: whoShouldAct
+        label: Who Should Act
+        type: string
+        list: true
+      - name: relatedFindings
+        label: Related Findings (IDs)
+        type: string
+        list: true
+      - name: body
+        label: Full Content
+        type: rich-text
+
+  - name: audiences
+    label: Audience Routes
+    path: src/content/audiences
+    fields:
+      - name: role
+        label: Role Name
+        type: string
+      - name: order
+        label: Order Number
+        type: number
+      - name: intro
+        label: Introduction
+        type: text
+      - name: actions
+        label: Actions to take
+        type: string
+        list: true
+      - name: relatedRecommendations
+        label: Related Recommendations (IDs)
+        type: string
+        list: true
+      - name: body
+        label: Full Content
+        type: rich-text
