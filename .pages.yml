@@ -1,0 +1,65 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: findings
+    label: Findings
+    path: src/content/findings
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: order
+        type: number
+      - name: summary
+        type: text
+      - name: whyItMatters
+        type: text
+      - name: body
+        type: rich-text
+
+  - name: recommendations
+    label: Recommendations
+    path: src/content/recommendations
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: number
+        type: number
+      - name: recommendation
+        type: text
+      - name: whyItMatters
+        type: text
+      - name: whatCanBeDone
+        type: string
+        list: true
+      - name: whoShouldAct
+        type: string
+        list: true
+      - name: relatedFindings
+        type: string
+        list: true
+      - name: body
+        type: rich-text
+
+  - name: audiences
+    label: Audience Routes
+    path: src/content/audiences
+    fields:
+      - name: role
+        type: string
+        required: true
+      - name: order
+        type: number
+      - name: intro
+        type: text
+      - name: actions
+        type: string
+        list: true
+      - name: relatedRecommendations
+        type: string
+        list: true
+      - name: body
+        type: rich-text
