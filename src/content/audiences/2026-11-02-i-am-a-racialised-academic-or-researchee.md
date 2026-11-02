@@ -12,4 +12,6 @@ intro: >
   The recommendations should be considered in relation to your own context,
   while responsibility for addressing inequity remains primarily with the
   institutions and systems that shape research opportunities.
+relatedRecommendations:
+  - protected-research-time
 ---
